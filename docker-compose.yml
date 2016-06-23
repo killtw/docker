@@ -1,0 +1,60 @@
+version: '2'
+
+services:
+    data:
+        build: ./data
+        volumes: 
+            - /var/lib/mysql
+            - /var/lib/mariadb
+            - /var/lib/postgres
+            - /var/lib/redis
+            - /var/lib/memcached
+    mariadb:
+        image: mariadb
+        volumes_from:
+            - data
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_DATABASE: v5
+            MYSQL_USER: homestead
+            MYSQL_PASSWORD: secret
+            MYSQL_ROOT_PASSWORD: secret
+    mysql:
+        image: mysql
+        volumes_from:
+            - data
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_DATABASE: homestead
+            MYSQL_USER: homestead
+            MYSQL_PASSWORD: secret
+            MYSQL_ROOT_PASSWORD: secret
+    postgres:
+        image: postgres
+        volumes_from:
+            - data
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_DB: homestead
+            POSTGRES_USER: homestead
+            POSTGRES_PASSWORD: secret
+    redis:
+        image: redis:alpine
+        volumes_from:
+            - data
+        ports:
+            - "6379:6379"
+    memcached:
+        image: memcached
+        volumes_from:
+            - data
+        ports:
+            - "11211:11211"
+    elasticsearch:
+        image: itzg/elasticsearch
+        ports:
+            - "9200:9200"
+            - "9300:9300"
