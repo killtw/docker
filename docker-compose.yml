@@ -3,7 +3,7 @@ version: '2'
 services:
     data:
         build: ./data
-        volumes: 
+        volumes:
             - /var/lib/mysql
             - /var/lib/mariadb
             - /var/lib/postgres
@@ -58,3 +58,11 @@ services:
         ports:
             - "9200:9200"
             - "9300:9300"
+    kibana:
+        image: kibana
+        ports:
+          - 5601:5601
+        environment:
+          - ELASTICSEARCH_URL=http://elasticsearch:9200
+        links:
+          - elasticsearch
