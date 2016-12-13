@@ -47,14 +47,8 @@ services:
             - data
         ports:
             - "6379:6379"
-    memcached:
-        image: memcached
-        volumes_from:
-            - data
-        ports:
-            - "11211:11211"
     elasticsearch:
-        image: itzg/elasticsearch
+        image: killtw/elasticsearch-rtf
         ports:
             - "9200:9200"
             - "9300:9300"
