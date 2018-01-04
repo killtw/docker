@@ -91,4 +91,12 @@ services:
             - mariadb
             - postgres
             - postgis
+    portainer:
+        image: portainer/portainer
+        volumes:
+            - data:/data
+            - /var/run/docker.sock:/var/run/docker.sock
+        restart: always
+        ports:
+            - 9527:9000
 
