@@ -1,18 +1,14 @@
-version: '2'
+version: '3'
+
+volumes:
+    data:
 
 services:
-    data:
-        build: ./data
-        volumes:
-            - /var/lib/mysql
-            - /var/lib/mariadb
-            - /var/lib/postgres
-            - /var/lib/redis
-            - /var/lib/memcached
     mariadb:
         image: mariadb
-        volumes_from:
-            - data
+        volumes:
+            - data:/var/lib/mariadb
+        restart: always
         ports:
             - "3306:3306"
         environment:
@@ -22,8 +18,9 @@ services:
             MYSQL_ROOT_PASSWORD: secret
     mysql:
         image: "mysql"
-        volumes_from:
-            - data
+        volumes:
+            - data:/var/lib/mysql
+        restart: always
         ports:
             - "3306:3306"
         environment:
@@ -33,8 +30,9 @@ services:
             MYSQL_ROOT_PASSWORD: secret
     postgres:
         image: postgres
-        volumes_from:
-            - data
+        volumes:
+            - data:/var/lib/postgres
+        restart: always
         ports:
             - "5432:5432"
         environment:
@@ -42,41 +40,55 @@ services:
             POSTGRES_PASSWORD: secret
     postgis:
         image: mdillon/postgis
-        volumes_from:
-            - data
+        volumes:
+            - data:/var/lib/postgres
+        restart: always
         ports:
             - "5432:5432"
         environment:
             POSTGRES_PASSWORD: secret
     redis:
         image: redis:alpine
-        volumes_from:
-            - data
+        volumes:
+            - data:/var/lib/redis
+        restart: always
         ports:
             - "6379:6379"
     memcached:
         image: memcached:alpine
-        ports: 
+        volumes:
+            - data:/var/lib/memcached
+        restart: always
+        ports:
             - "11211:11211"
     elasticsearch:
         image: "elasticsearch:2-alpine"
+        volumes:
+            - data:/var/lib/elasticsearch
+        restart: always
         ports:
             - "9200:9200"
             - "9300:9300"
-        environment:
-            ES_USER: flyingv
-            ES_PASS: flyingvespass
     kibana:
         image: kibana
         ports:
           - 5601:5601
         environment:
-          ELASTICSEARCH_URL: http://elasticsearch:9200
+            ELASTICSEARCH_URL: http://elasticsearch:9200
         links:
           - elasticsearch
     metabase:
         image: metabase/metabase
+        volumes:
+            - data:/var/lib/metabase
+        restart: always
         ports:
             - 3000:3000
+        environment:
+            JAVA_TIMEZONE: Aisa/Taipei
         links:
+            - mysql
             - mariadb
+            - postgres
+            - postgis
+
