@@ -17,7 +17,7 @@ services:
             MYSQL_PASSWORD: secret
             MYSQL_ROOT_PASSWORD: secret
     mysql:
-        image: "mysql"
+        image: mysql
         volumes:
             - data:/var/lib/mysql
         restart: always
@@ -37,15 +37,6 @@ services:
             - "5432:5432"
         environment:
             POSTGRES_DB: homestead
-            POSTGRES_PASSWORD: secret
-    postgis:
-        image: mdillon/postgis
-        volumes:
-            - data:/var/lib/postgres
-        restart: always
-        ports:
-            - "5432:5432"
-        environment:
             POSTGRES_PASSWORD: secret
     redis:
         image: redis:alpine
@@ -92,13 +83,4 @@ services:
             - mysql
             - mariadb
             - postgres
-            - postgis
-    portainer:
-        image: portainer/portainer
-        volumes:
-            - data:/data
-            - /var/run/docker.sock:/var/run/docker.sock
-        restart: always
-        ports:
-            - 9527:9000
 
